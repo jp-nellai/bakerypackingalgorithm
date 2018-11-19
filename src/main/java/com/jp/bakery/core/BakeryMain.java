@@ -9,6 +9,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * This Class takes the input order and provide the number of optimized packs for each items
+ * @author Jeyaprakash Ganesan
+ *
+ */
 public class BakeryMain {
 
 	public BakeryMain() {
@@ -56,14 +61,10 @@ public class BakeryMain {
 		System.out.println("CF list is : "+cflist);
 	}
 
-	private Map<String, Double> sortMap(Map<String, Double> input) {
-		Map<String, Double> result = input.entrySet().stream()
-				.sorted(Collections.reverseOrder(Map.Entry.comparingByKey())).collect(Collectors.toMap(
-						Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-		
-		return result;
-	}
-
+	/**
+	 * @param input map to be sorted in reverse order
+	 * @return sorted map
+	 */
 	private Map<String, Integer> sortPackMap(Map<String, Integer> input) {
 		Map<String, Integer> result = input.entrySet().stream()
 				.sorted(Collections.reverseOrder(Map.Entry.comparingByKey())).collect(Collectors.toMap(
@@ -72,6 +73,11 @@ public class BakeryMain {
 		return result;
 	}
 
+	/**
+	 * @param map sorted input map
+	 * @param order number of items ordered
+	 * @return intermediate map of optmized count of items
+	 */
 	private HashMap<String, Integer> putRawItemsIntoPack(Map<String, Double> map, int order) {
 		HashMap<String, Integer> completePackage = new HashMap<>();
 		map.forEach((k, v) -> {
@@ -87,7 +93,11 @@ public class BakeryMain {
 
 	}
 
-	public Map.Entry<String, Integer> getRemovableEntry(Map<String, Integer> sortedPackage) {
+	/**
+	 * @param sortedPackage sorted input map
+	 * @return removable entry in the map
+	 */
+	private Map.Entry<String, Integer> getRemovableEntry(Map<String, Integer> sortedPackage) {
 		boolean isRemovable = true;
 		Map.Entry<String, Integer> removableEntry = null;
 		for (Map.Entry<String, Integer> entry : sortedPackage.entrySet()) {
@@ -110,6 +120,11 @@ public class BakeryMain {
 		}
 	}
 
+	/**
+	 * @param map map of input number of items in each pack and the price per pack
+	 * @param order number of order from the customer
+	 * @return a list of optimized output
+	 */
 	public List<String> packItemsAndReturn(Map<String, Double> map, int order) {
 
 		List<String> fullPackList = new ArrayList<String>();
@@ -164,17 +179,10 @@ public class BakeryMain {
 		return fullPackList;
 	}
 
-	private HashMap<String, Integer> getPackageMap(Map<String, Double> map, int cf) {
-		HashMap<String, Integer> singleItemPack = new HashMap<>();
-		map.forEach((k, v) -> {
-			int itemsInPack = new Integer(k.substring(6, 7)).intValue();
-			int modcf = cf % itemsInPack;
-			int packCount = cf / itemsInPack;
-			singleItemPack.put(itemsInPack + ":" + packCount, modcf);
-		});
-		return singleItemPack;
-	}
-
+	/**
+	 * @param map input map
+	 * @return entry with the maxValue in the map
+	 */
 	private Map.Entry<String, Integer> maxValueInBundle(Map<String, Integer> map) {
 		Map.Entry<String, Integer> maxEntry = null;
 		for (Map.Entry<String, Integer> entry : map.entrySet()) {
@@ -185,11 +193,16 @@ public class BakeryMain {
 		return maxEntry;
 	}
 
-	private Map.Entry<String, Integer> getEntryForValueFromMap(Map<String, Integer> map, Integer maxValue) {
+	/**
+	 * @param map input map 
+	 * @param value input value 
+	 * @return entry with the given value
+	 */
+	private Map.Entry<String, Integer> getEntryForValueFromMap(Map<String, Integer> map, Integer value) {
 		Map.Entry<String, Integer> entryForValue = null;
 		for (Map.Entry<String, Integer> entry : map.entrySet()) {
 			int toBeRemoved = entry.getValue();
-			if (entryForValue == null && toBeRemoved != maxValue && toBeRemoved != 0) {
+			if (entryForValue == null && toBeRemoved != value && toBeRemoved != 0) {
 				entryForValue = entry;
 			}
 		}
