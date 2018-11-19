@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class BakeryMain {
@@ -18,6 +19,19 @@ public class BakeryMain {
 		int requiredVS = 10;
 		int requiredMB = 14;
 		int requiredCF = 13;
+		System.out.println("Enter the number of Vegemite Scroll: ");
+		Scanner scanner = new Scanner(System.in);
+		try {
+			
+			requiredVS = scanner.nextInt();
+			System.out.println("Enter the Blueberry Muffin: ");
+			requiredMB = scanner.nextInt();
+			System.out.println("Enter the Croissant: ");
+			requiredCF = scanner.nextInt();
+			
+		} finally {
+			scanner.close();
+		}		
 		Map<String, Double> vs5map = new HashMap<>();
 		Map<String, Double> mb11map = new HashMap<>();
 		Map<String, Double> cfmap = new HashMap<>();
@@ -99,12 +113,8 @@ public class BakeryMain {
 	public List<String> packItemsAndReturn(Map<String, Double> map, int order) {
 
 		List<String> fullPackList = new ArrayList<String>();
-		
-		HashMap<String, Integer> completePackage = new HashMap<>();
 
-		// completePackage = putRawItemsIntoPack(vs5map, vs5);
-		// completePackage = putRawItemsIntoPack(mb11map, mb11);
-		completePackage = putRawItemsIntoPack(map, order);
+		HashMap<String, Integer> completePackage = putRawItemsIntoPack(map, order);
 
 		Map<String, Integer> sortedPackage = sortPackMap(completePackage);
 
