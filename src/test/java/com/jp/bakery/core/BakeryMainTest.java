@@ -1,14 +1,17 @@
 package com.jp.bakery.core;
 
 import java.util.HashMap;
-import java.util.List;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import junit.framework.Assert;
-
+/**
+ * This is test class, that test the different incoming order for the Bakery packing algorithm
+ * @author Jeyaprakash Ganesan
+ *
+ */
 class BakeryMainTest {
 
 	private HashMap<String, Double> vsmap = new HashMap<>();
@@ -37,40 +40,59 @@ class BakeryMainTest {
 		mbmap = null;
 		cfmap = null;
 	}
-
+	
 	@Test
 	void testOrder001() {
 		BakeryMain bkMain = new BakeryMain();
+		
 		int vsorder = 10;
 		
-		List<String> vslist = bkMain.packItemsAndReturn(vsmap, vsorder);		
-		System.out.println("Vegemite Scroll list is  : "+vslist);
-		
-		String expectedvs = "Pack Of : 5 * 2 : valed at : 17.98";
-		for(String vs: vslist) {
-			Assert.assertEquals(expectedvs, vs);
-		}
+		String vspack = bkMain.packItemsAndReturn(vsmap, vsorder);
+		System.out.println("Vegemite Scroll list is  : "+vspack);		
+		String expectedvs = "Pack Of : 5 * 2 : valued at : 17.98 == Full Price : 17.98";		
+		Assert.assertEquals(vspack, expectedvs);
 		
 		int mborder = 14;
 		
-		List<String> mblist = bkMain.packItemsAndReturn(mbmap, mborder);
-		System.out.println("Blueberry Muffin list is  : "+mblist);
-		
-		String expectedmb = "Pack Of : 8 * 1 : valed at : 24.95 and Pack Of : 2 * 3 : valued at : 29.849999999999998 == full price is : 54.8";
-		for(String mb: mblist) {
-			Assert.assertEquals(expectedmb, mb);
-		}
+		String mbpack = bkMain.packItemsAndReturn(mbmap, mborder);
+		System.out.println("Blueberry Muffin list is  : "+mbpack);		
+		String expectedmb = "Pack Of : 8 * 1 : valued at : 24.95 and Pack Of : 2 * 3 : valued at : 29.849999999999998 == Full Price : 54.8";		
+		Assert.assertEquals(expectedmb, mbpack);
 		
 		int cforder = 13;
 
-		List<String> cflist = bkMain.packItemsAndReturn(cfmap, cforder);
-		System.out.println("Croissant list is  : "+cflist);
+		String cfpack = bkMain.packItemsAndReturn(cfmap, cforder);
+		System.out.println("Croissant list is  : "+cfpack);		
+		String expectedcf = "Pack Of : 5 * 2 : valued at : 19.9 and Pack Of : 3 * 1 : valued at : 5.95 == Full Price : 25.849999999999998";
 		
-		String expectedcf = "Pack Of : 5 * 2 : valed at : 19.9 and Pack Of : 3 * 1 : valued at : 5.95 == full price is : 25.849999999999998";
-		for(String cf: cflist) {
-			Assert.assertEquals(expectedcf, cf);
-		}
+		Assert.assertEquals(expectedcf, cfpack);
+		
 	}
 	
+	@Test
+	void testOrder002() {
+		BakeryMain bkMain = new BakeryMain();
+		
+		int vsorder = 13;
+		
+		String vspack = bkMain.packItemsAndReturn(vsmap, vsorder);		
+		System.out.println("Vegemite Scroll list is  : "+vspack);		
+		String expectedvs="Pack Of : 5 * 2 : valued at : 17.98 and Pack Of : 3 * 1 : valued at : 6.99 == Full Price : 24.97";		
+		Assert.assertEquals(vspack, expectedvs);
+		
+		int mborder = 15;
+		
+		String mbpack = bkMain.packItemsAndReturn(mbmap, mborder);
+		System.out.println("Blueberry Muffin list is  : "+mbpack);		
+		String expectedmb = "Pack Of : 5 * 3 : valued at : 50.849999999999994 == Full Price : 50.849999999999994";
+		Assert.assertEquals(mbpack, expectedmb);
+		
+		int cforder = 17;
+
+		String cfpack = bkMain.packItemsAndReturn(cfmap, cforder);
+		System.out.println("Croissant list is  : "+cfpack);
+		String expectedcf = "Pack Of : 9 * 1 : valued at : 16.99 and Pack Of : 5 * 1 : valued at : 9.95 and Pack Of : 3 * 1 : valued at : 5.95 == Full Price : 32.89";
+		Assert.assertEquals(cfpack, expectedcf);
+	}
 
 }
