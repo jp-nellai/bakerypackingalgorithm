@@ -103,6 +103,9 @@ public class BakeryMain {
 	private List<Map.Entry<String, Integer>> getFinalItemsList(Map<String, Integer> sortedPackage, int order) {
 		boolean isAllEntriesNeeded = false;
 		List<Map.Entry<String, Integer>> finalItemsList = new ArrayList<>();
+		/*
+		 * process the entry with max value first and add it into the pack
+		 */
 		Map.Entry<String, Integer> entryWithMaxValue = findEntryWithMaxValue(sortedPackage);
 		String[] maxEntryTokens = entryWithMaxValue.getKey().split(":");
 		int itemsInMaxEntry = new Integer(maxEntryTokens[0]).intValue();
@@ -113,7 +116,10 @@ public class BakeryMain {
 		finalItemsList.add(finalItemsList.size(), entryWithMaxValue);
 		int totalAnalyzedItems = 0;
 		for (Map.Entry<String, Integer> entry : sortedPackage.entrySet()) {
-
+			/*
+			 * Already entry with max value is added into the pack, so iterate only the other entries and 
+			 * update based on the algorithm
+			 */
 			if (entry.getValue() < maxValue) {
 
 				String[] entryTokens = entry.getKey().split(":");
@@ -121,29 +127,31 @@ public class BakeryMain {
 				int packCount = new Integer(entryTokens[1]).intValue();
 				balanceItems += itemsInEntry;
 				totalAnalyzedItems = itemsInEntry * packCount;
-				if (entry.getValue() > 0) {
-					if (maxValue % itemsInEntry == 0) {
+				int remainOfItemsDivision = maxValue % itemsInEntry;
+				/*
+				 * process only if value of entry is greater than 0, 
+				 * in the else part, we calculate the number of pack counts already 
+				 * in the list and then add the required packs if required
+				 */
+				if (entry.getValue() > 0) {					 
+					if (remainOfItemsDivision == 0) {
 						finalItemsList.add(finalItemsList.size(), entry);
 					} else {
 						if (maxValue % balanceItems == 0 && balanceItems > itemsInEntry) {
 							isAllEntriesNeeded = true;
 							finalItemsList.remove(entryWithMaxValue);
 						} else {
-							if (totalAnalyzedItems + maxPackCount * itemsInMaxEntry > order) {
-								if (maxValue % itemsInEntry > 0 && !sortedPackage.values().contains(0)) {
-									finalItemsList.remove(entryWithMaxValue);
-									if (!finalItemsList.contains(entry)) {
-										finalItemsList.add(finalItemsList.size(), entry);
-									}
-								} else {
-									finalItemsList.add(finalItemsList.size(), entry);
-								}
-							}
-						}
-
+							int maxAndTotalAnalyzedItems = totalAnalyzedItems + maxPackCount * itemsInMaxEntry;
+							/*
+							 * update list based on current analyzed items and balance items to be analyzed
+							 * This is done to reduce multiple if cognitive if checks in java code as part of quality
+							 */
+							updateFinalListBasedOnOrder(maxAndTotalAnalyzedItems, order, sortedPackage, remainOfItemsDivision, entryWithMaxValue, finalItemsList, entry);
+ 						}
 					}
 				} else {
-					if (maxValue % itemsInEntry == 0) {
+
+					if (remainOfItemsDivision == 0) {
 						if(finalItemsList.size() > 1) {
 							finalItemsList.remove(1);
 						}
@@ -165,6 +173,10 @@ public class BakeryMain {
 			}
 		}
 
+		/*
+		 * All entries are needed for a case that none of the value is zero,
+		 * that means, atleast one pack of each items have to be kept in final pack
+		 */
 		if (isAllEntriesNeeded) {
 			for (Map.Entry<String, Integer> entry : sortedPackage.entrySet()) {
 				if (!finalItemsList.contains(entry)) {
@@ -174,6 +186,28 @@ public class BakeryMain {
 			}
 		}
 		return finalItemsList;
+	}
+	
+	/**
+	 * @param totalItems current total items in analysis
+	 * @param order number of items ordered
+	 * @param map map to be analyzed
+	 * @param remainOfItemsDivision balance order on analysis
+	 * @param entryWithMaxValue entry with the max value
+	 * @param list list of map entries that have the pack of items
+	 * @param entry current entry in analysis
+	 */
+	private void updateFinalListBasedOnOrder(int totalItems, int order, Map<String, Integer> map, int remainOfItemsDivision, Map.Entry<String, Integer> entryWithMaxValue, List<Map.Entry<String, Integer>> list, Map.Entry<String, Integer> entry) {
+		if (totalItems > order) {
+			if (remainOfItemsDivision > 0 && !map.values().contains(0)) {
+				list.remove(entryWithMaxValue);
+				if (!list.contains(entry)) {
+					list.add(list.size(), entry);
+				}
+			} else {
+				list.add(list.size(), entry);
+			}
+		}
 	}
 
 	/**
