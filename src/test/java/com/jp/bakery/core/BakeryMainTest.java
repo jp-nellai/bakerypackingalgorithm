@@ -47,26 +47,24 @@ class BakeryMainTest {
 		
 		int vsorder = 10;
 		
-		String vspack = bkMain.packItemsAndReturn(vsmap, vsorder);
-		System.out.println("Vegemite Scroll list is  : "+vspack);		
+		String vspack = bkMain.packItemsAndReturn(vsmap, vsorder);		
 		String expectedvs = "Pack Of : 5 * 2 : valued at : 17.98 == Full Price : 17.98";		
 		Assert.assertEquals(vspack, expectedvs);
 		
 		int mborder = 14;
 		
-		String mbpack = bkMain.packItemsAndReturn(mbmap, mborder);
-		System.out.println("Blueberry Muffin list is  : "+mbpack);		
+		String mbpack = bkMain.packItemsAndReturn(mbmap, mborder);		
 		String expectedmb = "Pack Of : 8 * 1 : valued at : 24.95 and Pack Of : 2 * 3 : valued at : 29.849999999999998 == Full Price : 54.8";		
 		Assert.assertEquals(expectedmb, mbpack);
 		
 		int cforder = 13;
 
 		String cfpack = bkMain.packItemsAndReturn(cfmap, cforder);
-		System.out.println("Croissant list is  : "+cfpack);		
 		String expectedcf = "Pack Of : 5 * 2 : valued at : 19.9 and Pack Of : 3 * 1 : valued at : 5.95 == Full Price : 25.849999999999998";
 		
 		Assert.assertEquals(expectedcf, cfpack);
 		
+		System.out.println("Test Order 001 Success");
 	}
 	
 	@Test
@@ -76,23 +74,22 @@ class BakeryMainTest {
 		int vsorder = 13;
 		
 		String vspack = bkMain.packItemsAndReturn(vsmap, vsorder);		
-		System.out.println("Vegemite Scroll list is  : "+vspack);		
 		String expectedvs="Pack Of : 5 * 2 : valued at : 17.98 and Pack Of : 3 * 1 : valued at : 6.99 == Full Price : 24.97";		
 		Assert.assertEquals(vspack, expectedvs);
 		
 		int mborder = 15;
 		
-		String mbpack = bkMain.packItemsAndReturn(mbmap, mborder);
-		System.out.println("Blueberry Muffin list is  : "+mbpack);		
+		String mbpack = bkMain.packItemsAndReturn(mbmap, mborder);		
 		String expectedmb = "Pack Of : 5 * 3 : valued at : 50.849999999999994 == Full Price : 50.849999999999994";
 		Assert.assertEquals(mbpack, expectedmb);
 		
 		int cforder = 17;
 
-		String cfpack = bkMain.packItemsAndReturn(cfmap, cforder);
-		System.out.println("Croissant list is  : "+cfpack);
+		String cfpack = bkMain.packItemsAndReturn(cfmap, cforder);		
 		String expectedcf = "Pack Of : 9 * 1 : valued at : 16.99 and Pack Of : 5 * 1 : valued at : 9.95 and Pack Of : 3 * 1 : valued at : 5.95 == Full Price : 32.89";
 		Assert.assertEquals(cfpack, expectedcf);
+		
+		System.out.println("Test Order 002 Success");
 	}
 
 }
